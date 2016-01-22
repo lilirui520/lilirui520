@@ -1,0 +1,778 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+    
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+  <link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.4"/>
+
+
+    <meta name="description" content="nice to meet you" />
+
+
+
+  <meta name="keywords" content="django," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.4" />
+
+
+<meta name="description" content="Django 部署(nginx)1. 运行开发服务器测试123cd zqxt # 进入项目 zqxt 目录python manage.py runserver运行开发服务器测试，确保开发服务器下能正常打开网站。
+2. 安装 nginx 和 需要的包2.1 安装 nginx 等软件
+ubuntu / Linux Mint 等，下面简写为 (ubuntu):
+sudo&amp;nbsp;apt-get&amp;nbs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django 部署(nginx)">
+<meta property="og:url" content="http://yoursite.com/2015/07/31/Django/index.html">
+<meta property="og:site_name" content="milo's  blog">
+<meta property="og:description" content="Django 部署(nginx)1. 运行开发服务器测试123cd zqxt # 进入项目 zqxt 目录python manage.py runserver运行开发服务器测试，确保开发服务器下能正常打开网站。
+2. 安装 nginx 和 需要的包2.1 安装 nginx 等软件
+ubuntu / Linux Mint 等，下面简写为 (ubuntu):
+sudo&amp;nbsp;apt-get&amp;nbs">
+<meta property="og:updated_time" content="2015-07-31T11:13:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django 部署(nginx)">
+<meta name="twitter:description" content="Django 部署(nginx)1. 运行开发服务器测试123cd zqxt # 进入项目 zqxt 目录python manage.py runserver运行开发服务器测试，确保开发服务器下能正常打开网站。
+2. 安装 nginx 和 需要的包2.1 安装 nginx 等软件
+ubuntu / Linux Mint 等，下面简写为 (ubuntu):
+sudo&amp;nbsp;apt-get&amp;nbs">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+    <title> Django 部署(nginx) // milo's  blog </title>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+<!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+
+
+
+<div class="container one-column page-post-detail">
+    <div class="headband"></div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">milo's  blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-home"></i> <br />
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-categories"></i> <br />
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-archives"></i> <br />
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-tags"></i> <br />
+            標籤
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+        </div>
+    </header>
+
+    <main id="main" class="main">
+        <div class="main-inner">
+            <div id="content" class="content">
+                
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Django 部署(nginx)
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          發表於
+          <time itemprop="dateCreated" datetime="2015-07-31T19:13:34+08:00" content="2015-07-31">
+            2015-07-31
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分類於
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a href="/categories/技术类/" itemprop="url" rel="index"><span itemprop="name">技术类</span></a></span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2015/07/31/Django/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/31/Django/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="Django_部署(nginx)">Django 部署(nginx)</h1><h2 id="1-_运行开发服务器测试">1. 运行开发服务器测试</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> zqxt # 进入项目 zqxt 目录</span><br><span class="line"><span class="keyword">python</span> manage.<span class="keyword">py</span> runserver</span><br><span class="line">运行开发服务器测试，确保开发服务器下能正常打开网站。</span><br></pre></td></tr></table></figure>
+<h2 id="2-_安装_nginx_和_需要的包">2. 安装 nginx 和 需要的包</h2><p>2.1 安装 nginx 等软件</p>
+<p>ubuntu / Linux Mint 等，下面简写为 (ubuntu):</p>
+<pre class="brush:bash;toolbar:false">sudo&nbsp;apt-get&nbsp;install&nbsp;python-dev&nbsp;nginx</pre>
+
+<h2 id=""> </h2><p>centos / Fedora/ redhat 等，下面简写为 (centos)</p>
+<pre class="brush:bash;toolbar:false;">sudo&nbsp;yum&nbsp;install&nbsp;epel-release
+sudo&nbsp;yum&nbsp;install&nbsp;python-devel&nbsp;nginx</pre>
+
+<p><span style="color: rgb(47, 47, 47); font-family: &#39;lucida grande&#39;, &#39;lucida sans unicode&#39;, lucida, helvetica, &#39;Hiragino Sans GB&#39;, &#39;Microsoft YaHei&#39;, &#39;WenQuanYi Micro Hei&#39;, sans-serif; line-height: 27.2000007629395px; text-align: justify; background-color: rgb(255, 255, 255);">2.2 安装 supervisor, 一个专门用来管理进程的工具，我们用它来管理 gunicorn/uwsgi</span></p>
+<pre class="brush:bash;toolbar:false">sudo&nbsp;pip&nbsp;install&nbsp;supervisor</pre>
+
+<p><span style="color: rgb(47, 47, 47); font-family: &#39;lucida grande&#39;, &#39;lucida sans unicode&#39;, lucida, helvetica, &#39;Hiragino Sans GB&#39;, &#39;Microsoft YaHei&#39;, &#39;WenQuanYi Micro Hei&#39;, sans-serif; line-height: 27.2000007629395px; text-align: justify; background-color: rgb(255, 255, 255);"></span></p>
+<p><strong>Ubuntu用户 请直接看 3，以下是CentOS 注意事项：</strong></p>
+<p>CentOS下，如果不是非常懂 SELinux 和 iptables 的话，为了方便调试，可以先临时关闭它们，如果发现部署了之后出不来结果，可以临时关闭测试一下，这样就知道是不是 SELinux 和 iptables 的问题</p>
+<p><strong>CentOS 7 iptables如何使用</strong>：<a href="http://stackoverflow.com/questions/24756240/how-can-i-use-iptables-on-centos-7" target="_blank" rel="external">http://stackoverflow.com/questions/24756240/how-can-i-use-iptables-on-centos-7</a></p>
+<p>将 SELinux 设置为宽容模式，方便调试：</p>
+<pre class="brush:bash;toolbar:false">sudo&nbsp;setenforce&nbsp;0</pre>
+
+<p>防火墙相关的设置：</p>
+<pre class="brush:bash;toolbar:false">可以选择临时关闭防火墙
+sudo&nbsp;service&nbsp;iptables&nbsp;stop
+
+或者开放一些需要的端口，比如&nbsp;80
+sudo&nbsp;iptables&nbsp;-A&nbsp;INPUT&nbsp;-p&nbsp;tcp&nbsp;-m&nbsp;tcp&nbsp;--dport&nbsp;80&nbsp;-j&nbsp;ACCEPT</pre>
+
+<p>上面的两条命令，如果是 CentOS 7 用</p>
+<pre class="brush:bash;toolbar:false">临时关闭防火墙
+sudo&nbsp;systemctl&nbsp;stop&nbsp;firewalld
+
+或者&nbsp;开放需要的端口
+sudo&nbsp;firewall-cmd&nbsp;--zone=public&nbsp;--add-port=80/tcp&nbsp;--permanent
+sudo&nbsp;firewall-cmd&nbsp;--reload</pre>
+
+<p>备注：由于我还没有用 最新版本的 Fedora ，需要用 dnf 来安装包，有需求的同学自测，可以<a href="http://dnf.readthedocs.org/en/latest/user_faq.html#why-are-dnf-check-update-packages-not-marked-for-upgrade-in-the-following-dnf-upgrade" target="_blank" rel="external">参考这里</a>。</p>
+<h2 id="3-_使用_gunicorn_/_uwsgi_来部署_(二选一）">3. 使用 gunicorn / uwsgi 来部署 (二选一）</h2><p><span style="color: rgb(255, 0, 0);"><strong>注意：以下为二选一，不需要两个都用</strong></span></p>
+<h3 id="3-1_使用_gunicorn（纯Python实现的包）:">3.1 使用 gunicorn（纯Python实现的包）:</h3><pre class="brush:bash;toolbar:false">sudo&nbsp;pip&nbsp;install&nbsp;gunicorn</pre>
+
+<p><strong>在项目目录下运行下面的命令进行测试：</strong></p>
+<pre class="brush:bash;toolbar:false">gunicorn&nbsp;-w4&nbsp;-b0.0.0.0:8001&nbsp;zqxt.wsgi</pre>
+
+<p>-w 表示开启多少个worker，-b 表示要使用的ip和port，我们这里用的是 8001，0.0.0.0代表监控电脑的所有 ip。</p>
+<p><strong>如果使用了 virtualenv 可以这样</strong></p>
+<pre class="brush:bash;toolbar:false">/path/to/env/bin/gunicorn&nbsp;--chdir&nbsp;/path/to/project&nbsp;--pythonpath&nbsp;/path/to/env/&nbsp;-w4&nbsp;-b0.0.0.0:8017&nbsp;project.wsgi:application</pre>
+
+<p>用 —pythonpath 指定依赖包路径，多个的时候用逗号,隔开，如：&#39;/path/to/lib,/home/tu/lib&#39;</p>
+<h3 id="3-2_使用_uwsgi（纯C语言实现的包）:">3.2 使用 uwsgi（纯C语言实现的包）:</h3><p>安装 uwsgi</p>
+<pre class="brush:bash;toolbar:false">sudo&nbsp;pip&nbsp;install&nbsp;uwsgi</pre>
+
+<p>使用 uwsgi 运行项目</p>
+<pre class="brush:bash;toolbar:false">uwsgi&nbsp;--http&nbsp;:8001&nbsp;--chdir&nbsp;/path/to/project&nbsp;--home=/path/to/env&nbsp;--module&nbsp;project.wsgi</pre>
+
+<p>这样就可以跑了，—home 指定virtualenv 路径，如果没有可以去掉。project.wsgi 指 project/wsgi.py 文件</p>
+<h3 id="如果提示端口已经被占用:">如果提示端口已经被占用:</h3><pre class="brush:plain;toolbar:false">probably&nbsp;another&nbsp;instance&nbsp;of&nbsp;uWSGI&nbsp;is&nbsp;running&nbsp;on&nbsp;the&nbsp;same&nbsp;address&nbsp;(:8002).
+bind():&nbsp;Address&nbsp;already&nbsp;in&nbsp;use&nbsp;[core/socket.c&nbsp;line&nbsp;764]</pre>
+
+<p>这时可以把相关的进程 kill 掉:</p>
+<p><strong>按照端口进行查询：</strong></p>
+<pre class="brush:bash;toolbar:false">lsof&nbsp;-i&nbsp;:8002</pre>
+
+<p>可以查出：</p>
+<pre class="brush:plain;toolbar:false">COMMAND&nbsp;&nbsp;PID&nbsp;USER&nbsp;&nbsp;&nbsp;FD&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEVICE&nbsp;SIZE/OFF&nbsp;NODE&nbsp;NAME
+uwsgi&nbsp;&nbsp;&nbsp;2208&nbsp;&nbsp;&nbsp;tu&nbsp;&nbsp;&nbsp;&nbsp;4u&nbsp;&nbsp;IPv4&nbsp;0x53492abadb5c9659&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0t0&nbsp;&nbsp;TCP&nbsp;*:teradataordbms&nbsp;(LISTEN)
+uwsgi&nbsp;&nbsp;&nbsp;2209&nbsp;&nbsp;&nbsp;tu&nbsp;&nbsp;&nbsp;&nbsp;4u&nbsp;&nbsp;IPv4&nbsp;0x53492abadb5c9659&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0t0&nbsp;&nbsp;TCP&nbsp;*:teradataordbms&nbsp;(LISTEN)</pre>
+
+<p>这时根据 PID 可以用下面的命令 kill 掉相关程序：</p>
+<pre class="brush:bash;toolbar:false">sudo&nbsp;kill&nbsp;-9&nbsp;2208&nbsp;2209</pre>
+
+<p><strong>按照程序名称查询：</strong></p>
+<pre class="brush:bash;toolbar:false">ps&nbsp;aux&nbsp;|&nbsp;grep&nbsp;uwsgi</pre>
+
+<h2 id="4-_使用supervisor来管理进程">4. 使用supervisor来管理进程</h2><p>生成 supervisor 默认配置文件，比如我们放在 /etc/supervisord.conf 路径中：</p>
+<pre class="brush:bash;toolbar:false">sudo&nbsp;echo_supervisord_conf&nbsp;&gt;&nbsp;/etc/supervisord.conf</pre>
+
+<p>打开 supervisor.conf 在最底部添加：</p>
+<pre class="brush:plain;toolbar:false;">[program:zqxt]
+&nbsp;command=/path/to/uwsgi&nbsp;--http&nbsp;:8003&nbsp;--chdir&nbsp;/path/to/zqxt&nbsp;--module&nbsp;zqxt.wsgi
+&nbsp;directory=/path/to/zqxt
+&nbsp;startsecs=0
+&nbsp;stopwaitsecs=0
+&nbsp;autostart=true
+&nbsp;autorestart=true</pre>
+
+<p>command 中写上对应的命令，这样，就可以用 supervisor 来管理了</p>
+<pre class="brush:bash;toolbar:false">supervisord&nbsp;-c&nbsp;/etc/supervisord.conf</pre>
+
+<p>重启 zqxt 程序（项目）：</p>
+<pre class="brush:bash;toolbar:false">supervisorctl&nbsp;-c&nbsp;/etc/supervisord.conf&nbsp;restart&nbsp;zqxt</pre>
+
+<p>启动，停止，或重启 supervisor 管理的某个程序 或 所有程序：</p>
+<pre class="brush:bash;toolbar:false">supervisorctl&nbsp;-c&nbsp;/etc/supervisord.conf&nbsp;[start|stop|restart]&nbsp;[program-name|all]</pre>
+
+<p>以 uwsgi 为例，上面这样使用一行命令太长了，我们使用 ini 配置文件来搞定，比如项目在 /home/tu/zqxt 这个位置，</p>
+<p>在其中新建一个 uwsgi.ini 全路径为 /path/to/project/uwsgi.ini</p>
+<pre class="brush:bash;toolbar:false">&nbsp;[uwsgi]
+&nbsp;chdir=/path/to/project
+&nbsp;module=zqxt.wsgi:application
+&nbsp;socket&nbsp;=&nbsp;/tmp/zqxt.sock
+&nbsp;master=True
+&nbsp;pidfile=/tmp/zqxt-master.pid
+&nbsp;vacuum=True
+&nbsp;max-requests=5000
+&nbsp;daemonize=/path/to/project/zqxt.log</pre>
+
+<p>注意上面的 /tmp/zqxt.sock ，一会儿我们把它和 nginx 关联起来。</p>
+<p>修改 supervisor 配置文件中的 command 一行：</p>
+<pre class="brush:plain;toolbar:false">[program:zqxt]
+&nbsp;command=/path/to/uwsgi&nbsp;--ini&nbsp;/path/to/project/uwsgi.ini
+&nbsp;directory=/path/to/zqxt
+&nbsp;startsecs=0</pre>
+
+<p>然后重启一下 supervisor：</p>
+<pre class="brush:bash;toolbar:false">supervisorctl&nbsp;-c&nbsp;/etc/supervisord.conf&nbsp;restart&nbsp;zqxt
+或者&nbsp;supervisorctl&nbsp;-c&nbsp;/etc/supervisord.conf&nbsp;restart&nbsp;all</pre>
+
+<h2 id="5-_配置_nginx">5. 配置 nginx</h2><p>新建一个网站 zqxt</p>
+<pre class="brush:bash;toolbar:false">sudo&nbsp;vim&nbsp;/etc/nginx/sites-available/zqxt.conf</pre>
+
+<p>写入以下内容：</p>
+<pre class="brush:plain;toolbar:false">upstream&nbsp;zqxt_uwsgi&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;server&nbsp;unix:///tmp/zqxt.sock;
+}
+
+server&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;listen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;80;
+&nbsp;&nbsp;&nbsp;&nbsp;server_name&nbsp;www.ziqiangxuetang.com;
+&nbsp;&nbsp;&nbsp;&nbsp;charset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utf-8;
+
+&nbsp;&nbsp;&nbsp;&nbsp;client_max_body_size&nbsp;75M;
+
+&nbsp;&nbsp;&nbsp;&nbsp;location&nbsp;/media&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alias&nbsp;/path/to/project/media;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;location&nbsp;/static&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alias&nbsp;/path/to/project/static;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;location&nbsp;/&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uwsgi_pass&nbsp;&nbsp;zqxt_uwsgi;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/etc/nginx/uwsgi_params;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+}</pre>
+
+<p>激活网站：</p>
+<pre class="brush:bash;toolbar:false">sudo&nbsp;ln&nbsp;-s&nbsp;/etc/nginx/sites-available/zqxt.conf&nbsp;/etc/nginx/sites-enabled/zqxt.conf</pre>
+
+<p>重启 nginx 服务器：</p>
+<pre class="brush:bash;toolbar:false">sudo&nbsp;service&nbsp;nginx&nbsp;reload
+或者&nbsp;sudo&nbsp;service&nbsp;nginx&nbsp;restart</pre>
+
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/django/" rel="tag">#django</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/22/welcoming/" rel="next">hello hexo</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+            </div>
+
+            
+
+            
+              <div class="comments" id="comments">
+                
+                  <div class="ds-thread" data-thread-key="2015/07/31/Django/"
+                       data-title="Django 部署(nginx)" data-url="http://yoursite.com/2015/07/31/Django/">
+                  </div>
+                
+              </div>
+            
+        </div>
+
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="milo" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">milo</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">nice to meet you</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">分類</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">標籤</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Django_部署(nginx)"><span class="nav-number">1.</span> <span class="nav-text">Django 部署(nginx)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-_运行开发服务器测试"><span class="nav-number">1.1.</span> <span class="nav-text">1. 运行开发服务器测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-_安装_nginx_和_需要的包"><span class="nav-number">1.2.</span> <span class="nav-text">2. 安装 nginx 和 需要的包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">1.3.</span> <span class="nav-text"> </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-_使用_gunicorn_/_uwsgi_来部署_(二选一）"><span class="nav-number">1.4.</span> <span class="nav-text">3. 使用 gunicorn / uwsgi 来部署 (二选一）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1_使用_gunicorn（纯Python实现的包）:"><span class="nav-number">1.4.1.</span> <span class="nav-text">3.1 使用 gunicorn（纯Python实现的包）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2_使用_uwsgi（纯C语言实现的包）:"><span class="nav-number">1.4.2.</span> <span class="nav-text">3.2 使用 uwsgi（纯C语言实现的包）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如果提示端口已经被占用:"><span class="nav-number">1.4.3.</span> <span class="nav-text">如果提示端口已经被占用:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-_使用supervisor来管理进程"><span class="nav-number">1.5.</span> <span class="nav-text">4. 使用supervisor来管理进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-_配置_nginx"><span class="nav-number">1.6.</span> <span class="nav-text">5. 配置 nginx</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+        <div class="footer-inner">
+            <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">milo</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+        </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+</div>
+
+<script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"nuomi520"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+  	<script src="/js/ua-parser.min.js"></script>
+  	<script src="/js/hook-duoshuo.js"></script>
+  
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.4"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.4"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.4" id="motion.global"></script>
+
+
+
+  <script type="text/javascript" src="/js/search-toggle.js"></script>
+
+
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.4" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if (CONFIG.sidebar === 'always') {
+            displaySidebar();
+        }
+    });
+</script>
+
+
+
+
+
+
+
+
+<!-- lazyload -->
+<script type="text/javascript" src="/js/lazyload.js"></script>
+<script type="text/javascript">
+    jQuery(function () {
+        jQuery("#posts img").lazyload({
+            placeholder: "/images/loading.gif",
+            effect: "fadeIn"
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,673 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+    
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+  <link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.4"/>
+
+
+    <meta name="description" content="nice to meet you" />
+
+
+
+  <meta name="keywords" content="openvpn," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.4" />
+
+
+<meta name="description" content="CentOS 6.5下 OpenVPN部署
+openvpn一款在Linux网关服务器使用的开源的VPN软件，顾名思义，其实就是用来打通一条安全的虚拟专用通道，实现用户远程办公，获取内网资源。
+
+该软件可跨平台在在Linux、xBSD、Mac OS X与Windows间使用，并利用openssl作为加密库，使用加密证书或用户名/密码来实现身份验证，是一款不可多得的开源VPN解决方案。
+
+系统环境：C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS 6.5 OpenVpn 部署">
+<meta property="og:url" content="http://yoursite.com/2015/07/22/openvpn/index.html">
+<meta property="og:site_name" content="milo's  blog">
+<meta property="og:description" content="CentOS 6.5下 OpenVPN部署
+openvpn一款在Linux网关服务器使用的开源的VPN软件，顾名思义，其实就是用来打通一条安全的虚拟专用通道，实现用户远程办公，获取内网资源。
+
+该软件可跨平台在在Linux、xBSD、Mac OS X与Windows间使用，并利用openssl作为加密库，使用加密证书或用户名/密码来实现身份验证，是一款不可多得的开源VPN解决方案。
+
+系统环境：C">
+<meta property="og:updated_time" content="2015-07-31T11:34:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CentOS 6.5 OpenVpn 部署">
+<meta name="twitter:description" content="CentOS 6.5下 OpenVPN部署
+openvpn一款在Linux网关服务器使用的开源的VPN软件，顾名思义，其实就是用来打通一条安全的虚拟专用通道，实现用户远程办公，获取内网资源。
+
+该软件可跨平台在在Linux、xBSD、Mac OS X与Windows间使用，并利用openssl作为加密库，使用加密证书或用户名/密码来实现身份验证，是一款不可多得的开源VPN解决方案。
+
+系统环境：C">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+    <title> CentOS 6.5 OpenVpn 部署 // milo's  blog </title>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+<!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+
+
+
+<div class="container one-column page-post-detail">
+    <div class="headband"></div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">milo's  blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-home"></i> <br />
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-categories"></i> <br />
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-archives"></i> <br />
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-tags"></i> <br />
+            標籤
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+        </div>
+    </header>
+
+    <main id="main" class="main">
+        <div class="main-inner">
+            <div id="content" class="content">
+                
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              CentOS 6.5 OpenVpn 部署
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          發表於
+          <time itemprop="dateCreated" datetime="2015-07-22T00:36:57+08:00" content="2015-07-22">
+            2015-07-22
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分類於
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a href="/categories/技术类/" itemprop="url" rel="index"><span itemprop="name">技术类</span></a></span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2015/07/22/openvpn/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/22/openvpn/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="CentOS_6-5下_OpenVPN部署">CentOS 6.5下 OpenVPN部署</h1><ul>
+<li><p><strong>openvpn</strong>一款在Linux网关服务器使用的开源的VPN软件，顾名思义，其实就是用来打通一条安全的虚拟专用通道，实现用户远程办公，获取内网资源。</p>
+</li>
+<li><p>该软件可跨平台在在Linux、xBSD、Mac OS X与Windows间使用，并利用openssl作为加密库，使用加密证书或用户名/密码来实现身份验证，是一款不可多得的开源VPN解决方案。</p>
+</li>
+<li><p><strong>系统环境：CentOS6.5 x64</strong></p>
+</li>
+<li><strong>OPENVPN： openvpn-2.3.0</strong></li>
+</ul>
+<hr>
+<h2 id="环境设置：">环境设置：</h2><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">vpn <span class="string">server:</span> <span class="string">eth0:</span><span class="number">192.168</span>.11.19</span><br><span class="line"><span class="label"></span><br><span class="line">eth1:</span><span class="number">60.</span>x.x.x </span><br><span class="line"></span><br><span class="line">vpn <span class="string">client:</span> 任何地方 </span><br><span class="line"></span><br><span class="line">启动并清空iptables规则</span><br><span class="line"></span><br><span class="line">iptables -t NAT -F</span><br><span class="line"></span><br><span class="line">iptables -F</span><br><span class="line"></span><br><span class="line">service iptables save</span><br><span class="line"></span><br><span class="line">service iptables restart</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">关闭SELINUX</span><br><span class="line"></span><br><span class="line">setenforce <span class="number">0</span></span><br><span class="line"></span><br><span class="line">vi <span class="regexp">/etc/</span>sysconfig/selinux</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SELINUX=disabled</span><br></pre></td></tr></table></figure>
+<h1 id="server端：">server端：</h1><h2 id="一-网络设置">一.网络设置</h2><h3 id="1-开启服务器端路由转发功能">1.开启服务器端路由转发功能</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysctl<span class="class">.conf</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">net<span class="class">.ipv4</span><span class="class">.ip_forward</span> = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+<h3 id="2-设置nat转发:">2.设置nat转发:</h3><figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">注：保证VPN地址池可路由出外网</span><br><span class="line"></span><br><span class="line">iptables -t nat -<span class="keyword">A</span> POSTROUTING -s <span class="number">10.8.0.0</span>/24 -o eth0 -j MASQUERADE</span><br></pre></td></tr></table></figure>
+<h3 id="3-设置openvpn端口通过：">3.设置openvpn端口通过：</h3><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p TCP --dport <span class="number">1194</span> -j ACCEPT</span><br><span class="line"></span><br><span class="line">iptables -A INPUT -p TCP --dport <span class="number">7505</span> -j ACCEPT</span><br><span class="line"></span><br><span class="line">iptables -A INPUT -m <span class="keyword">state</span> --state ESTABLISHED,RELATED -j ACCEPT</span><br></pre></td></tr></table></figure>
+<h3 id="4-时间同步(重要)：">4.时间同步(重要)：</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ntpdate asia<span class="class">.pool</span><span class="class">.ntp</span><span class="class">.org</span></span><br></pre></td></tr></table></figure>
+<h2 id="二-安装依赖库">二.安装依赖库</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y openssl openssl-devel lzo lzo-devel pam pam-devel automake pkgconfig</span><br></pre></td></tr></table></figure>
+<h2 id="三-安装openvpn:">三.安装openvpn:</h2><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">wget -c <span class="string">http:</span><span class="comment">//swupdate.openvpn.org/community/releases/openvpn-2.3.0.tar.gz</span></span><br><span class="line"></span><br><span class="line">tar zxvf openvpn-<span class="number">2.3</span>.0.tar.gz</span><br><span class="line"></span><br><span class="line">cd openvpn-<span class="number">2.3</span>.0</span><br><span class="line"></span><br><span class="line">.<span class="regexp">/configure --prefix=/</span>usr<span class="regexp">/local/</span>openvpn</span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"></span><br><span class="line">mkdir -p <span class="regexp">/etc/</span>openvpn</span><br><span class="line"></span><br><span class="line">复制模板到openvpn配置目录：</span><br><span class="line"></span><br><span class="line">cp -rf sample <span class="regexp">/etc/</span>openvpn/</span><br><span class="line"></span><br><span class="line">复制openvpn配置文件到主目录：</span><br><span class="line"></span><br><span class="line">cp <span class="regexp">/etc/</span>openvpn<span class="regexp">/sample/</span>sample-config-files<span class="regexp">/server.conf /</span>etc<span class="regexp">/openvpn/</span></span><br><span class="line"></span><br><span class="line">cd ..</span><br></pre></td></tr></table></figure>
+<h2 id="四-下载easy-rsa:">四.下载easy-rsa:</h2><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">注：该包用来制作ca证书，服务端证书，客户端证书,openvpn2.3.0该版本源码不包含easy-rsa,所以需要单独下载安装用来配合openvpn实现证书生成。</span><br><span class="line"></span><br><span class="line">wget -c <span class="string">https:</span><span class="comment">//github.com/OpenVPN/easy-rsa/archive/master.zip</span></span><br><span class="line"></span><br><span class="line">unzip master</span><br><span class="line"></span><br><span class="line">mv easy-rsa-master easy-rsa</span><br><span class="line"></span><br><span class="line">cp -rf easy-rsa <span class="regexp">/etc/</span>openvpn</span><br><span class="line"></span><br><span class="line">cd <span class="regexp">/etc/</span>openvpn<span class="regexp">/easy-rsa/</span>easy-rsa/<span class="number">2.0</span></span><br><span class="line"></span><br><span class="line">修改证书变量</span><br><span class="line"></span><br><span class="line">vi vars</span><br><span class="line"></span><br><span class="line">修改如下参数</span><br><span class="line"></span><br><span class="line">注：在后面生成服务端ca证书时，这里的配置会作为缺省配置</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">export KEY_COUNTRY=<span class="string">"CN"</span></span><br><span class="line"></span><br><span class="line">export KEY_PROVINCE=<span class="string">"SX"</span></span><br><span class="line"></span><br><span class="line">export KEY_CITY=<span class="string">"Xian"</span></span><br><span class="line"></span><br><span class="line">export KEY_ORG=<span class="string">"example"</span></span><br><span class="line"></span><br><span class="line">export KEY_EMAIL=<span class="string">"user01@example.com"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">做SSL配置文件软链：</span><br><span class="line"></span><br><span class="line">ln -s openssl-<span class="number">1.0</span>.0.cnf openssl.cnf</span><br><span class="line"></span><br><span class="line">修改vars文件可执行并调用</span><br><span class="line"></span><br><span class="line">chmod +x vars</span><br><span class="line"></span><br><span class="line">source ./vars</span><br><span class="line"><span class="label"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NOTE:</span> If you run .<span class="regexp">/clean-all, I will be doing a rm -rf on /</span>etc<span class="regexp">/openvpn/</span>easy-rsa<span class="regexp">/easy-rsa/</span><span class="number">2.0</span>/keys</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">注：也就是如果执行.<span class="regexp">/clean-all，就会清空/</span>etc<span class="regexp">/openvpn/</span>easy-rsa<span class="regexp">/easy-rsa/</span><span class="number">2.0</span>/keys下所有文件</span><br></pre></td></tr></table></figure>
+<h2 id="五、开始配置证书：">五、开始配置证书：</h2><h3 id="1-清空原有证书：">1.清空原有证书：</h3><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./clean-<span class="built_in">all</span></span><br><span class="line"></span><br><span class="line">注：下面这个命令在第一次安装时可以运行，以后在添加完客户端后慎用，因为这个命令会清除所有已经生成的证书密钥，和上面的提示对应</span><br></pre></td></tr></table></figure>
+<h3 id="2-生成服务器端ca证书">2.生成服务器端ca证书</h3><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./<span class="keyword">build-ca</span><br><span class="line"></span></span><br><span class="line">注：由于之前做过缺省配置，这里一路回车即可</span><br></pre></td></tr></table></figure>
+<h3 id="3-生成服务器端密钥证书,_后面这个openvpn-example-com就是服务器名，也可以自定义">3.生成服务器端密钥证书, 后面这个openvpn.example.com就是服务器名，也可以自定义</h3><hr>
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">./build-<span class="keyword">key</span>-server openvpn.example.com</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Generating a <span class="number">2048</span> bit RSA <span class="keyword">private</span> <span class="keyword">key</span></span><br><span class="line"></span><br><span class="line">...................................................+++</span><br><span class="line"></span><br><span class="line">..................................+++</span><br><span class="line"></span><br><span class="line">writing <span class="keyword">new</span> <span class="keyword">private</span> <span class="keyword">key</span> <span class="keyword">to</span> <span class="comment">'openvpn.example.com.key'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">You are about <span class="keyword">to</span> be asked <span class="keyword">to</span> enter information that will be</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">incorporated</span><br><span class="line"></span><br><span class="line"><span class="keyword">into</span> your certificate request.</span><br><span class="line"></span><br><span class="line">What you are about <span class="keyword">to</span> enter <span class="keyword">is</span> what <span class="keyword">is</span> called a Distinguished Name <span class="keyword">or</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">a DN.</span><br><span class="line"></span><br><span class="line">There are quite a few fields but you can leave some blank</span><br><span class="line"></span><br><span class="line"><span class="keyword">For</span> some fields there will be a <span class="keyword">default</span> value,</span><br><span class="line"></span><br><span class="line"><span class="keyword">If</span> you enter <span class="comment">'.', the field will be left blank.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Country Name (<span class="number">2</span> letter code) [CN]:</span><br><span class="line"></span><br><span class="line">State <span class="keyword">or</span> Province Name (full name) [SX]:</span><br><span class="line"></span><br><span class="line">Locality Name (eg, city) [Xian]:</span><br><span class="line"></span><br><span class="line">Organization Name (eg, company) [example]:</span><br><span class="line"></span><br><span class="line">Organizational Unit Name (eg, section) []:</span><br><span class="line"></span><br><span class="line">Common Name (eg, your name <span class="keyword">or</span> your server<span class="comment">'s hostname)</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">[openvpn.example.com]:</span><br><span class="line"></span><br><span class="line">Name [EasyRSA]:</span><br><span class="line"></span><br><span class="line">Email Address [user01@example.com]:</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Please enter the following <span class="comment">'extra' attributes</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">to</span> be sent <span class="keyword">with</span> your certificate request</span><br><span class="line"></span><br><span class="line">A challenge password []:<span class="number">123456</span></span><br><span class="line"></span><br><span class="line">An <span class="keyword">optional</span> company name []:example</span><br><span class="line"></span><br><span class="line"><span class="keyword">Using</span> configuration <span class="keyword">from</span> /etc/openvpn/easy-rsa/easy-rsa/<span class="number">2.0</span>/openssl-<span class="number">1.0</span>.0.cnf</span><br><span class="line"></span><br><span class="line">Check that the request matches the signature</span><br><span class="line"></span><br><span class="line">Signature ok</span><br><span class="line"></span><br><span class="line">The Subject<span class="comment">'s Distinguished Name is as follows</span></span><br><span class="line"></span><br><span class="line">countryName :PRINTABLE:<span class="comment">'CN'</span></span><br><span class="line"></span><br><span class="line">stateOrProvinceName :PRINTABLE:<span class="comment">'SX'</span></span><br><span class="line"></span><br><span class="line">localityName :PRINTABLE:<span class="comment">'Xian'</span></span><br><span class="line"></span><br><span class="line">organizationName :PRINTABLE:<span class="comment">'example'</span></span><br><span class="line"></span><br><span class="line">commonName :PRINTABLE:<span class="comment">'openvpn.example.com'</span></span><br><span class="line"></span><br><span class="line">name :PRINTABLE:<span class="comment">'EasyRSA'</span></span><br><span class="line"></span><br><span class="line">emailAddress :IA5STRING:<span class="comment">'user01@example.com'</span></span><br><span class="line"></span><br><span class="line">Certificate <span class="keyword">is</span> <span class="keyword">to</span> be certified <span class="keyword">until</span> Jun <span class="number">10</span> <span class="number">21</span>:<span class="number">58</span>:<span class="number">49</span> <span class="number">2023</span> GMT (<span class="number">3650</span> days)</span><br><span class="line"></span><br><span class="line">Sign the certificate? [y/n]:y</span><br><span class="line"></span><br><span class="line"><span class="number">1</span> out <span class="keyword">of</span> <span class="number">1</span> certificate requests certified, commit? [y/n]y</span><br><span class="line"></span><br><span class="line">Write out database <span class="keyword">with</span> <span class="number">1</span> <span class="keyword">new</span> entries</span><br><span class="line"></span><br><span class="line">Data Base Updated</span><br></pre></td></tr></table></figure>
+<h3 id="4-生成所需客户端证书密钥文件：">4.生成所需客户端证书密钥文件：</h3><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./<span class="keyword">build-key </span>client1</span><br><span class="line"></span><br><span class="line">./<span class="keyword">build-key </span>client2</span><br><span class="line"></span><br><span class="line">注：这里与生成服务端证书配置类似，中间一步提示输入服务端密码，其他按照缺省提示一路回车即可。</span><br></pre></td></tr></table></figure>
+<h3 id="5-再生成diffie_hellman参数，用于增强openvpn安全性（生成需要漫长等待）">5.再生成diffie hellman参数，用于增强openvpn安全性（生成需要漫长等待）</h3><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./build-<span class="number">dh</span></span><br></pre></td></tr></table></figure>
+<h3 id="6-打包keys">6.打包keys</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar zcvf keys<span class="class">.tar</span><span class="class">.gz</span> keys/</span><br></pre></td></tr></table></figure>
+<h3 id="7-终端发送到客户端备用">7.终端发送到客户端备用</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install lrzsz -y</span><br><span class="line"></span><br><span class="line">sz keys<span class="class">.tar</span><span class="class">.gz</span></span><br></pre></td></tr></table></figure>
+<h2 id="六-配置openvpn_server：">六.配置openvpn server：</h2><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/openvpn/server.conf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">注：可按照默认模板配置，本例为自定义配置文件：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> 设置监听IP，默认是监听所有IP</span><br><span class="line"></span><br><span class="line">;<span class="built_in">local</span> <span class="operator">a</span>.b.c.d</span><br><span class="line"></span><br><span class="line"> 设置监听端口，必须要对应的在防火墙里面打开</span><br><span class="line"></span><br><span class="line">port <span class="number">1194</span></span><br><span class="line"></span><br><span class="line"> 设置用TCP还是UDP协议？</span><br><span class="line"></span><br><span class="line">;proto tcp</span><br><span class="line"></span><br><span class="line">proto tcp</span><br><span class="line"></span><br><span class="line"> 设置创建tun的路由IP通道，还是创建tap的以太网通道</span><br><span class="line"></span><br><span class="line"> 路由IP容易控制，所以推荐使用它；但如果如IPX等必须</span><br><span class="line"></span><br><span class="line"> 使用第二层才能通过的通讯，则可以用tap方式，tap也</span><br><span class="line"></span><br><span class="line"> 就是以太网桥接</span><br><span class="line"></span><br><span class="line">;dev tap</span><br><span class="line"></span><br><span class="line">dev tun</span><br><span class="line"></span><br><span class="line"> Windows需要给网卡一个名称，这里设置，linux不需要</span><br><span class="line"></span><br><span class="line">;dev-node MyTap</span><br><span class="line"></span><br><span class="line"> 这里是重点，必须指定SSL/TLS root certificate (ca),</span><br><span class="line"></span><br><span class="line"> certificate(cert), <span class="operator">and</span> <span class="keyword">private</span> key (key)</span><br><span class="line"></span><br><span class="line"> ca文件是服务端和客户端都必须使用的，但不需要ca.key</span><br><span class="line"></span><br><span class="line"> 服务端和客户端指定各自的.crt和.key</span><br><span class="line"></span><br><span class="line"> 请注意路径,可以使用以配置文件开始为根的相对路径,</span><br><span class="line"></span><br><span class="line"> 也可以使用绝对路径</span><br><span class="line"></span><br><span class="line"> 请小心存放.key密钥文件</span><br><span class="line"></span><br><span class="line">ca /etc/openvpn/easy-rsa/easy-rsa/<span class="number">2.0</span>/<span class="built_in">keys</span>/ca.crt</span><br><span class="line"></span><br><span class="line">cert /etc/openvpn/easy-rsa/easy-rsa/<span class="number">2.0</span>/<span class="built_in">keys</span>/openvpn.example.com.crt</span><br><span class="line"></span><br><span class="line">key /etc/openvpn/easy-rsa/easy-rsa/<span class="number">2.0</span>/<span class="built_in">keys</span>/openvpn.example.com.key</span><br><span class="line"></span><br><span class="line"> This <span class="built_in">file</span> should be kept secret</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 指定Diffie hellman parameters.</span><br><span class="line"></span><br><span class="line">dh /etc/openvpn/easy-rsa/easy-rsa/<span class="number">2.0</span>/<span class="built_in">keys</span>/dh2048.pem</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 配置VPN使用的网段，OpenVPN会自动提供基于该网段的DHCP</span><br><span class="line"></span><br><span class="line"> 服务，但不能和任何一方的局域网段重复，保证唯一</span><br><span class="line"></span><br><span class="line">server <span class="number">10.8</span>.0.0 <span class="number">255.255</span>.255.0</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 维持一个客户端和virtual IP的对应表，以方便客户端重新</span><br><span class="line"></span><br><span class="line"> 连接可以获得同样的IP</span><br><span class="line"></span><br><span class="line">ifconfig-pool-persist ipp.txt</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 配置为以太网桥模式,但需要使用系统的桥接功能</span><br><span class="line"></span><br><span class="line"> 这里不需要使用</span><br><span class="line"></span><br><span class="line">;server-bridge <span class="number">10.8</span>.0.4 <span class="number">255.255</span>.255.0 <span class="number">10.8</span>.0.50 <span class="number">10.8</span>.0.100</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 为客户端创建对应的路由,以另其通达公司网内部服务器</span><br><span class="line"></span><br><span class="line"> 但记住，公司网内部服务器也需要有可用路由返回到客户端</span><br><span class="line"></span><br><span class="line">;push <span class="string">"route 192.168.20.0 255.255.255.0"</span></span><br><span class="line"></span><br><span class="line">push <span class="string">"route 192.168.11.0 255.255.255.0"</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 为特定的客户端指定IP或指定路由,该路由通常是客户端后面的</span><br><span class="line"></span><br><span class="line"> 内网网段,而不是服务端连接的网段</span><br><span class="line"></span><br><span class="line"> ccd是/etc/openvpn下的目录，其中建有希望限制的客户端Common</span><br><span class="line"></span><br><span class="line"> Name为文件名的文件,并通过下面的命令写入固定IP地址</span><br><span class="line"></span><br><span class="line"> 例如Common Name为client1,则在/etc/openvpn/ccd/client1写有：</span><br><span class="line"></span><br><span class="line"> ifconfig-push <span class="number">10.9</span>.0.1 <span class="number">10.9</span>.0.2</span><br><span class="line"></span><br><span class="line">;client-config-dir ccd</span><br><span class="line"></span><br><span class="line">;route <span class="number">192.168</span>.40.128 <span class="number">255.255</span>.255.248</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 为可以对不同的客户端设置防火墙等权限</span><br><span class="line"></span><br><span class="line"> 可以让其自动运行对应脚本,可参考man</span><br><span class="line"></span><br><span class="line">;learn-address ./script</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 若客户端希望所有的流量都通过VPN传输,则可以使用该语句</span><br><span class="line"></span><br><span class="line"> 其会自动改变客户端的网关为VPN服务器,推荐关闭</span><br><span class="line"></span><br><span class="line"> 一旦设置，请小心服务端的DHCP设置问题</span><br><span class="line"></span><br><span class="line">;push <span class="string">"redirect-gateway"</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 用OpenVPN的DHCP功能为客户端提供指定的DNS、WINS等</span><br><span class="line"></span><br><span class="line">;push <span class="string">"dhcp-option DNS 10.8.0.1"</span></span><br><span class="line"></span><br><span class="line">;push <span class="string">"dhcp-option WINS 10.8.0.1"</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 默认客户端之间是不能直接通讯的，除非把下面的语句注释掉</span><br><span class="line"></span><br><span class="line">client-<span class="built_in">to</span>-client</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 如果您希望有相同Common Name的客户端都可以登陆</span><br><span class="line"></span><br><span class="line"> 也可以注释下面的语句,推荐每个客户端都使用不用的Common Name</span><br><span class="line"></span><br><span class="line"> 常用于测试</span><br><span class="line"></span><br><span class="line">;duplicate-cn</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 设置服务端检测的间隔和超时时间</span><br><span class="line"></span><br><span class="line">keepalive <span class="number">10</span> <span class="number">120</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 下面是一些对安全性增强的措施</span><br><span class="line"></span><br><span class="line"> For extra security beyond that provided</span><br><span class="line"></span><br><span class="line"> <span class="keyword">by</span> SSL/TLS, <span class="built_in">create</span> <span class="operator">an</span> <span class="string">"HMAC firewall"</span></span><br><span class="line"></span><br><span class="line"> <span class="built_in">to</span> help block DoS attacks <span class="operator">and</span> UDP port flooding.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> Generate <span class="operator">with</span>:</span><br><span class="line"></span><br><span class="line"> openvpn <span class="comment">--genkey --secret ta.key</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> The server <span class="operator">and</span> <span class="keyword">each</span> client must have</span><br><span class="line"></span><br><span class="line"> <span class="operator">a</span> copy <span class="operator">of</span> this key.</span><br><span class="line"></span><br><span class="line"> The <span class="keyword">second</span> parameter should be <span class="number">0</span></span><br><span class="line"></span><br><span class="line"> <span class="command"><span class="keyword">on</span> <span class="title">the</span> <span class="title">server</span> <span class="title">and</span> <span class="title">1</span> <span class="title">on</span> <span class="title">the</span> <span class="title">clients</span>.</span></span><br><span class="line"></span><br><span class="line">;tls-auth ta.key <span class="number">0</span>  This <span class="built_in">file</span> is secret</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> Select <span class="operator">a</span> cryptographic cipher.</span><br><span class="line"></span><br><span class="line"> This config <span class="keyword">item</span> must be copied <span class="built_in">to</span></span><br><span class="line"></span><br><span class="line"> <span class="operator">the</span> client config <span class="built_in">file</span> <span class="keyword">as</span> well.</span><br><span class="line"></span><br><span class="line">;cipher BF-CBC  Blowfish (default)</span><br><span class="line"></span><br><span class="line">;cipher AES-<span class="number">128</span>-CBC  AES</span><br><span class="line"></span><br><span class="line">;cipher DES-EDE3-CBC  Triple-DES</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 使用lzo压缩的通讯,服务端和客户端都必须配置</span><br><span class="line"></span><br><span class="line">comp-lzo</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 设置最大用户数</span><br><span class="line"></span><br><span class="line">;<span class="built_in">max</span>-clients <span class="number">100</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 让OpenVPN以nobody用户和组来运行（安全）</span><br><span class="line"></span><br><span class="line">;user nobody</span><br><span class="line"></span><br><span class="line">;group nobody</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> The persist options will <span class="keyword">try</span> <span class="built_in">to</span> avoid</span><br><span class="line"></span><br><span class="line"> accessing certain resources <span class="command"><span class="keyword">on</span> <span class="title">restart</span></span></span><br><span class="line"></span><br><span class="line"> that may no longer be accessible because</span><br><span class="line"></span><br><span class="line"> <span class="operator">of</span> <span class="operator">the</span> privilege downgrade.</span><br><span class="line"></span><br><span class="line">persist-key</span><br><span class="line"></span><br><span class="line">persist-tun</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 输出短日志,每分钟刷新一次,以显示当前的客户端</span><br><span class="line"></span><br><span class="line">status /var/<span class="built_in">log</span>/openvpn/openvpn-status.<span class="built_in">log</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 缺省日志会记录在系统日志中，但也可以导向到其他地方</span><br><span class="line"></span><br><span class="line"> 建议调试的使用先不要设置,调试完成后再定义</span><br><span class="line"></span><br><span class="line"><span class="built_in">log</span> /var/<span class="built_in">log</span>/openvpn/openvpn.<span class="built_in">log</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">log</span>-append /var/<span class="built_in">log</span>/openvpn/openvpn.<span class="built_in">log</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 设置日志的级别</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> <span class="number">0</span> is silent, except <span class="keyword">for</span> fatal errors</span><br><span class="line"></span><br><span class="line"> <span class="number">4</span> is reasonable <span class="keyword">for</span> general usage</span><br><span class="line"></span><br><span class="line"> <span class="number">5</span> <span class="operator">and</span> <span class="number">6</span> can help <span class="built_in">to</span> debug connection problems</span><br><span class="line"></span><br><span class="line"> <span class="number">9</span> is extremely verbose</span><br><span class="line"></span><br><span class="line">verb <span class="number">3</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> Silence repeating messages. At most <span class="number">20</span></span><br><span class="line"></span><br><span class="line"> sequential messages <span class="operator">of</span> <span class="operator">the</span> same message</span><br><span class="line"></span><br><span class="line"> category will be output <span class="built_in">to</span> <span class="operator">the</span> <span class="built_in">log</span>.</span><br><span class="line"></span><br><span class="line">;mute <span class="number">20</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">创建日志目录：</span><br><span class="line"></span><br><span class="line"> mkdir -p /var/<span class="built_in">log</span>/openvpn/</span><br><span class="line"></span><br><span class="line">启动openvpn server</span><br><span class="line"></span><br><span class="line"> /usr/<span class="built_in">local</span>/openvpn/sbin/openvpn <span class="comment">--config /etc/openvpn/server.conf &amp;</span></span><br><span class="line"></span><br><span class="line">设置开机启动：</span><br><span class="line"></span><br><span class="line">echo <span class="string">"/usr/local/openvpn/sbin/openvpn --config /etc/openvpn/server.conf &gt; /dev/null 2&gt;&amp;1 &amp;"</span> &gt;&gt; /etc/rc.<span class="built_in">local</span></span><br></pre></td></tr></table></figure>
+<h1 id="client端：">client端：</h1><h1 id="安装WINDOWS客户端（WIN7_64bit）">安装WINDOWS客户端（WIN7 64bit）</h1><h2 id="1-下载客户端，并默认安装：">1.下载客户端，并默认安装：</h2><p><a href="http://vpntech.googlecode.com/files/openvpn-2.1.1-gui-1.0.3-install-cn-64bit.zip" target="_blank" rel="external">http://vpntech.googlecode.com/files/openvpn-2.1.1-gui-1.0.3-install-cn-64bit.zip</a></p>
+<h2 id="2-将服务端打包文件解压，并将包内ca-crt、client1-crt、client1-key复制到客户端C:\Program_Files\OpenVPN\config下-">2.将服务端打包文件解压，并将包内ca.crt、client1.crt、client1.key复制到客户端C:\Program Files\OpenVPN\config下.</h2><h2 id="3-在C:\Program_Files\OpenVPN\config下创建client-ovpn文件">3.在C:\Program Files\OpenVPN\config下创建client.ovpn文件</h2><p>内容如下：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br></pre></td><td class="code"><pre><span class="line">定义是一个客户端</span><br><span class="line"></span><br><span class="line">client</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> 定义使用路由IP模式，与服务端一致</span><br><span class="line"></span><br><span class="line">;dev tap</span><br><span class="line"></span><br><span class="line">dev tun</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 定义Windows下使用的网卡名称,linux不需要</span><br><span class="line"></span><br><span class="line">;dev-node MyTap</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 定义使用的协议，与服务端一致</span><br><span class="line"></span><br><span class="line">;proto tcp</span><br><span class="line"></span><br><span class="line">proto tcp</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 指定服务端地址和端口,可以用多行指定多台服务器</span><br><span class="line"></span><br><span class="line"> 实现负载均衡（从上往下尝试）</span><br><span class="line"></span><br><span class="line">remote <span class="number">60.</span>x.x.x <span class="number">1194</span></span><br><span class="line"></span><br><span class="line">;remote my-server-<span class="number">2</span> <span class="number">1194</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 若上面配置了多台服务器，让客户端随机连接</span><br><span class="line"></span><br><span class="line">;remote-<span class="built_in">random</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 解析服务器域名</span><br><span class="line"></span><br><span class="line"> Keep trying indefinitely <span class="built_in">to</span> <span class="built_in">resolve</span> <span class="operator">the</span></span><br><span class="line"></span><br><span class="line"> host name <span class="operator">of</span> <span class="operator">the</span> OpenVPN server. Very useful</span><br><span class="line"></span><br><span class="line"> <span class="command"><span class="keyword">on</span> <span class="title">machines</span> <span class="title">which</span> <span class="title">are</span> <span class="title">not</span> <span class="title">permanently</span> <span class="title">connected</span></span></span><br><span class="line"></span><br><span class="line"> <span class="built_in">to</span> <span class="operator">the</span> <span class="keyword">internet</span> such <span class="keyword">as</span> laptops.</span><br><span class="line"></span><br><span class="line">resolv-retry infinite</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 客户端不需要绑定端口</span><br><span class="line"></span><br><span class="line"> Most clients <span class="built_in">do</span> <span class="operator">not</span> need <span class="built_in">to</span> bind <span class="built_in">to</span></span><br><span class="line"></span><br><span class="line"> <span class="operator">a</span> specific <span class="built_in">local</span> port <span class="built_in">number</span>.</span><br><span class="line"></span><br><span class="line">nobind</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 也是为了让Openvpn也nobody运行（安全）</span><br><span class="line"></span><br><span class="line"> 注意：Windows不能设置</span><br><span class="line"></span><br><span class="line">;user nobody</span><br><span class="line"></span><br><span class="line">;group nobody</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> Try <span class="built_in">to</span> preserve some state across restarts.</span><br><span class="line"></span><br><span class="line">persist-key</span><br><span class="line"></span><br><span class="line">persist-tun</span><br><span class="line"></span><br><span class="line"> 若客户端通过HTTP Proxy，在这里设置</span><br><span class="line"></span><br><span class="line"> 要使用Proxy，不能使用UDP为VPN的通讯协议</span><br><span class="line"></span><br><span class="line">;<span class="keyword">http</span>-proxy-retry  retry <span class="command"><span class="keyword">on</span> <span class="title">connection</span> <span class="title">failures</span></span></span><br><span class="line"></span><br><span class="line">;<span class="keyword">http</span>-proxy [proxy server] [proxy port ]</span><br><span class="line"></span><br><span class="line"> 无线网络有很多多余的头文件，设置忽略它</span><br><span class="line"></span><br><span class="line">;mute-replay-warnings</span><br><span class="line"></span><br><span class="line"> 重点，就是指定ca和客户端的证书</span><br><span class="line"></span><br><span class="line">ca ca.crt</span><br><span class="line"></span><br><span class="line">cert client1.crt</span><br><span class="line"></span><br><span class="line">key client1.key</span><br><span class="line"></span><br><span class="line"> 如果服务端打开了PAM认证模块，客户端需要另其有效</span><br><span class="line"></span><br><span class="line">;auth-user-pass</span><br><span class="line"></span><br><span class="line"> 一些安全措施</span><br><span class="line"></span><br><span class="line"> Verify server certificate <span class="keyword">by</span> checking</span><br><span class="line"></span><br><span class="line"> that <span class="operator">the</span> certicate has <span class="operator">the</span> nsCertType</span><br><span class="line"></span><br><span class="line"> field <span class="built_in">set</span> <span class="built_in">to</span> <span class="string">"server"</span>. This is <span class="operator">an</span></span><br><span class="line"></span><br><span class="line"> important precaution <span class="built_in">to</span> protect against</span><br><span class="line"></span><br><span class="line"> <span class="operator">a</span> potential attack discussed here:</span><br><span class="line"></span><br><span class="line"> <span class="keyword">http</span>://openvpn.net/howto.htmlmitm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> To use this feature, you will need <span class="built_in">to</span> generate</span><br><span class="line"></span><br><span class="line"> your server certificates <span class="operator">with</span> <span class="operator">the</span> nsCertType</span><br><span class="line"></span><br><span class="line"> field <span class="built_in">set</span> <span class="built_in">to</span> <span class="string">"server"</span>. The build-key-server</span><br><span class="line"></span><br><span class="line"> script <span class="operator">in</span> <span class="operator">the</span> easy-rsa <span class="built_in">folder</span> will <span class="built_in">do</span> this.</span><br><span class="line"></span><br><span class="line">;ns-cert-type server</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> If <span class="operator">a</span> tls-auth key is used <span class="command"><span class="keyword">on</span> <span class="title">the</span> <span class="title">server</span></span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">then</span> every client must also have <span class="operator">the</span> key.</span><br><span class="line"></span><br><span class="line">;tls-auth ta.key <span class="number">1</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> Select <span class="operator">a</span> cryptographic cipher.</span><br><span class="line"></span><br><span class="line"> If <span class="operator">the</span> cipher option is used <span class="command"><span class="keyword">on</span> <span class="title">the</span> <span class="title">server</span></span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">then</span> you must also specify <span class="keyword">it</span> here.</span><br><span class="line"></span><br><span class="line">;cipher x</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> 使用lzo压缩，与服务端一致</span><br><span class="line"></span><br><span class="line">comp-lzo</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> Set <span class="built_in">log</span> <span class="built_in">file</span> verbosity.</span><br><span class="line"></span><br><span class="line">verb <span class="number">3</span></span><br><span class="line"></span><br><span class="line"> Silence repeating messages</span><br><span class="line"></span><br><span class="line">;mute <span class="number">20</span></span><br></pre></td></tr></table></figure>
+<p>5.连接：</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在右下角的openvpn图标上右击，选择“Connect”,若能正常分配<span class="literal">IP</span>，则连接成功。</span><br></pre></td></tr></table></figure>
+<p>6.最终测试：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;ipconfig/all</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">以太网适配器 本地连接* 12:</span><br><span class="line"></span><br><span class="line">连接特定的 DNS 后缀 . . . . . . . :</span><br><span class="line"></span><br><span class="line">描述. . . . . . . . . . . . . . . : TAP-Win32 Adapter V9</span><br><span class="line"></span><br><span class="line">物理地址. . . . . . . . . . . . . : 00-FF-45-FB-F5-E2</span><br><span class="line"></span><br><span class="line">DHCP 已启用 . . . . . . . . . . . : 是</span><br><span class="line"></span><br><span class="line">自动配置已启用. . . . . . . . . . : 是</span><br><span class="line"></span><br><span class="line">本地链接 IPv6 地址. . . . . . . . : <span class="number">fe80::848d:bd1d:c1f4:fb51</span>%27(首选)</span><br><span class="line"></span><br><span class="line">IPv4 地址 . . . . . . . . . . . . : <span class="number">10.8.0.6</span>(首选)</span><br><span class="line"></span><br><span class="line">子网掩码 . . . . . . . . . . . . : <span class="number">255.255.255.252</span></span><br><span class="line"></span><br><span class="line">获得租约的时间 . . . . . . . . . : <span class="number">2013年6月15</span>日 22:36:59</span><br><span class="line"></span><br><span class="line">租约过期的时间 . . . . . . . . . : <span class="number">2014年6月15</span>日 22:36:59</span><br><span class="line"></span><br><span class="line">默认网关. . . . . . . . . . . . . :</span><br><span class="line"></span><br><span class="line">DHCP 服务器 . . . . . . . . . . . : <span class="number">10.8.0.5</span></span><br><span class="line"></span><br><span class="line">DHCPv6 IAID . . . . . . . . . . . : <span class="number">453050181</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">在vpn client上ping intranet server 主机IP：<span class="number">192.168.11.19</span></span><br><span class="line"></span><br><span class="line">C:\Users\Administrator&gt;ping <span class="number">192.168.11.19</span></span><br></pre></td></tr></table></figure>
+<p>正在 Ping 192.168.11.19 具有 32 字节的数据:</p>
+<p>来自 192.168.11.19 的回复: 字节=32 时间=2ms TTL=63</p>
+<p>来自 192.168.11.19 的回复: 字节=32 时间&lt;1ms TTL=63</p>
+<p>来自 192.168.11.19 的回复: 字节=32 时间&lt;1ms TTL=63</p>
+<p>来自 192.168.11.19 的回复: 字节=32 时间&lt;1ms TTL=63</p>
+<p>大功告成。。。<br>```</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/openvpn/" rel="tag">#openvpn</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/07/22/welcoming/" rel="prev">hello hexo</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+            </div>
+
+            
+
+            
+              <div class="comments" id="comments">
+                
+                  <div class="ds-thread" data-thread-key="2015/07/22/openvpn/"
+                       data-title="CentOS 6.5 OpenVpn 部署" data-url="http://yoursite.com/2015/07/22/openvpn/">
+                  </div>
+                
+              </div>
+            
+        </div>
+
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="milo" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">milo</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">nice to meet you</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">分類</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">標籤</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CentOS_6-5下_OpenVPN部署"><span class="nav-number">1.</span> <span class="nav-text">CentOS 6.5下 OpenVPN部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境设置："><span class="nav-number">1.1.</span> <span class="nav-text">环境设置：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#server端："><span class="nav-number">2.</span> <span class="nav-text">server端：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-网络设置"><span class="nav-number">2.1.</span> <span class="nav-text">一.网络设置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-开启服务器端路由转发功能"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.开启服务器端路由转发功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-设置nat转发:"><span class="nav-number">2.1.2.</span> <span class="nav-text">2.设置nat转发:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-设置openvpn端口通过："><span class="nav-number">2.1.3.</span> <span class="nav-text">3.设置openvpn端口通过：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-时间同步(重要)："><span class="nav-number">2.1.4.</span> <span class="nav-text">4.时间同步(重要)：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-安装依赖库"><span class="nav-number">2.2.</span> <span class="nav-text">二.安装依赖库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-安装openvpn:"><span class="nav-number">2.3.</span> <span class="nav-text">三.安装openvpn:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-下载easy-rsa:"><span class="nav-number">2.4.</span> <span class="nav-text">四.下载easy-rsa:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、开始配置证书："><span class="nav-number">2.5.</span> <span class="nav-text">五、开始配置证书：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-清空原有证书："><span class="nav-number">2.5.1.</span> <span class="nav-text">1.清空原有证书：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-生成服务器端ca证书"><span class="nav-number">2.5.2.</span> <span class="nav-text">2.生成服务器端ca证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-生成服务器端密钥证书,_后面这个openvpn-example-com就是服务器名，也可以自定义"><span class="nav-number">2.5.3.</span> <span class="nav-text">3.生成服务器端密钥证书, 后面这个openvpn.example.com就是服务器名，也可以自定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-生成所需客户端证书密钥文件："><span class="nav-number">2.5.4.</span> <span class="nav-text">4.生成所需客户端证书密钥文件：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-再生成diffie_hellman参数，用于增强openvpn安全性（生成需要漫长等待）"><span class="nav-number">2.5.5.</span> <span class="nav-text">5.再生成diffie hellman参数，用于增强openvpn安全性（生成需要漫长等待）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-打包keys"><span class="nav-number">2.5.6.</span> <span class="nav-text">6.打包keys</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-终端发送到客户端备用"><span class="nav-number">2.5.7.</span> <span class="nav-text">7.终端发送到客户端备用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六-配置openvpn_server："><span class="nav-number">2.6.</span> <span class="nav-text">六.配置openvpn server：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#client端："><span class="nav-number">3.</span> <span class="nav-text">client端：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装WINDOWS客户端（WIN7_64bit）"><span class="nav-number">4.</span> <span class="nav-text">安装WINDOWS客户端（WIN7 64bit）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-下载客户端，并默认安装："><span class="nav-number">4.1.</span> <span class="nav-text">1.下载客户端，并默认安装：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-将服务端打包文件解压，并将包内ca-crt、client1-crt、client1-key复制到客户端C:\Program_Files\OpenVPN\config下-"><span class="nav-number">4.2.</span> <span class="nav-text">2.将服务端打包文件解压，并将包内ca.crt、client1.crt、client1.key复制到客户端C:\Program Files\OpenVPN\config下.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-在C:\Program_Files\OpenVPN\config下创建client-ovpn文件"><span class="nav-number">4.3.</span> <span class="nav-text">3.在C:\Program Files\OpenVPN\config下创建client.ovpn文件</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+        <div class="footer-inner">
+            <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">milo</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+        </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+</div>
+
+<script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"nuomi520"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+  	<script src="/js/ua-parser.min.js"></script>
+  	<script src="/js/hook-duoshuo.js"></script>
+  
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.4"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.4"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.4" id="motion.global"></script>
+
+
+
+  <script type="text/javascript" src="/js/search-toggle.js"></script>
+
+
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.4" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if (CONFIG.sidebar === 'always') {
+            displaySidebar();
+        }
+    });
+</script>
+
+
+
+
+
+
+
+
+<!-- lazyload -->
+<script type="text/javascript" src="/js/lazyload.js"></script>
+<script type="text/javascript">
+    jQuery(function () {
+        jQuery("#posts img").lazyload({
+            placeholder: "/images/loading.gif",
+            effect: "fadeIn"
+        });
+    });
+</script>
+</body>
+</html>
